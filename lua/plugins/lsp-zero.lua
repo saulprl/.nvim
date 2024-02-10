@@ -8,14 +8,14 @@ return {
     -- LSP Support
     { "neovim/nvim-lspconfig" },
     -- Autocompletion
-    {'hrsh7th/nvim-cmp'},
-    {'hrsh7th/cmp-nvim-lsp'},
-    {'hrsh7th/cmp-buffer'},
-    {'hrsh7th/cmp-path'},
-    {'hrsh7th/cmp-nvim-lua'},
-    {'saadparwaiz1/cmp_luasnip'},
-    {'rafamadriz/friendly-snippets'},
-    {'L3MON4D3/LuaSnip'},
+    { 'hrsh7th/nvim-cmp' },
+    { 'hrsh7th/cmp-nvim-lsp' },
+    { 'hrsh7th/cmp-buffer' },
+    { 'hrsh7th/cmp-path' },
+    { 'hrsh7th/cmp-nvim-lua' },
+    { 'saadparwaiz1/cmp_luasnip' },
+    { 'rafamadriz/friendly-snippets' },
+    { 'L3MON4D3/LuaSnip' },
   },
   init = function()
     local lsp_zero = require('lsp-zero')
@@ -25,11 +25,23 @@ return {
         buffer = bufnr,
         preserve_mappings = false,
       })
+
+      vim.keymap.set("n", "<leader>fpd", function()
+        vim.lsp.buf.code_action({
+          context = {
+            only = { "quickfix" }
+          },
+          filter = function(action)
+            return action.title == "Fix all auto-fixable problems"
+          end,
+          apply = true,
+        })
+      end)
     end)
 
     require('mason').setup({})
     require('mason-lspconfig').setup({
-      ensure_installed = {'tsserver', 'rust_analyzer'},
+      ensure_installed = { 'tsserver', 'rust_analyzer' },
       handlers = {
         lsp_zero.default_setup,
         lua_ls = function()
@@ -40,15 +52,15 @@ return {
     })
 
     local cmp = require('cmp')
-    local cmp_select = {behavior = cmp.SelectBehavior.Select}
+    local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
     cmp.setup({
       sources = {
-        {name = 'path'},
-        {name = 'nvim_lsp'},
-        {name = 'nvim_lua'},
-        {name = 'luasnip', keyword_length = 2},
-        {name = 'buffer', keyword_length = 3},
+        { name = 'path' },
+        { name = 'nvim_lsp' },
+        { name = 'nvim_lua' },
+        { name = 'luasnip', keyword_length = 2 },
+        { name = 'buffer',  keyword_length = 3 },
       },
       formatting = lsp_zero.cmp_format(),
       mapping = cmp.mapping.preset.insert({
