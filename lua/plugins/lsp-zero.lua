@@ -27,11 +27,13 @@ return {
       })
 
       vim.keymap.set("n", "<leader>fpd", function()
+        vim.diagnostic.goto_next()
         vim.lsp.buf.code_action({
           context = {
             only = { "quickfix" }
           },
           filter = function(action)
+            print(action)
             return action.title == "Fix all auto-fixable problems"
           end,
           apply = true,
